@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Eau Souterraine - Afrique du Sud</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="fas fa-water me-2"></i>Dashboard Eau Souterraine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i>Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/analytics.html"><i class="fas fa-chart-bar me-2"></i>Analyses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/predictions.html"><i class="fas fa-chart-line me-2"></i>Prédictions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/historical.html"><i class="fas fa-history me-2"></i>Données historiques</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-outline-primary"><i class="fas fa-cog me-2"></i>Paramètres</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar">
+        <div class="position-sticky pt-3">
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Régions</span>
+                <button id="btn-add-region" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addRegionModal">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </h6>
+            <ul class="nav flex-column" id="regions-list">
+                <li class="nav-item d-flex align-items-center">
+                    <a class="nav-link active flex-grow-1" href="#">
+                        Western Cape
+                    </a>
+                    <button class="btn btn-sm text-danger delete-region-btn">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <a class="nav-link flex-grow-1" href="#">
+                        Eastern Cape
+                    </a>
+                    <button class="btn btn-sm text-danger delete-region-btn">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <a class="nav-link flex-grow-1" href="#">
+                        Northern Cape
+                    </a>
+                    <button class="btn btn-sm text-danger delete-region-btn">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <a class="nav-link flex-grow-1" href="#">
+                        Free State
+                    </a>
+                    <button class="btn btn-sm text-danger delete-region-btn">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <a class="nav-link flex-grow-1" href="#">
+                        Gauteng
+                    </a>
+                    <button class="btn btn-sm text-danger delete-region-btn">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </li>
+            </ul>
+
+            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
+                <span>Période</span>
+            </h6>
+            <div class="px-3">
+                <select class="form-select form-select-sm">
+                    <option>7 jours</option>
+                    <option selected>30 jours</option>
+                    <option>3 mois</option>
+                    <option>6 mois</option>
+                    <option>1 an</option>
+                </select>
+            </div>
+
+            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
+                <span>Filtres</span>
+            </h6>
+            <div class="px-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="zones-urbaines" checked>
+                    <label class="form-check-label" for="zones-urbaines">Zones urbaines</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="zones-rurales">
+                    <label class="form-check-label" for="zones-rurales">Zones rurales</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="agriculture">
+                    <label class="form-check-label" for="agriculture">Agriculture</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <main class="px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Tableau de bord - État de l'eau souterraine</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-file-export me-2"></i>Exporter</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-share-alt me-2"></i>Partager</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        <span data-feather="calendar"></span>
+                        Aujourd'hui
+                    </button>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-tint me-2"></i>Niveau moyen</h5>
+                            <p class="card-text display-6">68.5%</p>
+                            <p class="small"><i class="fas fa-arrow-up me-1"></i>0.8% par rapport au mois précédent</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-warning">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-exclamation-triangle me-2"></i>Zones à risque</h5>
+                            <p class="card-text display-6">19</p>
+                            <p class="small"><i class="fas fa-arrow-down me-1"></i>2 depuis le mois dernier</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-cloud-rain me-2"></i>Prévisions pluie</h5>
+                            <p class="card-text display-6">55 mm</p>
+                            <p class="small">Prochains 30 jours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-danger">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-fire me-2"></i>Alerte sécheresse</h5>
+                            <p class="card-text display-6">Niveau 2</p>
+                            <p class="small">Modérée</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-map-marked-alt me-2"></i>Carte des niveaux d'eau souterraine
+                        </div>
+                        <div class="card-body">
+                            <div id="mapContainer"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-area me-2"></i>Tendance des niveaux
+                        </div>
+                        <div class="card-body">
+                            <canvas id="waterLevelChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line me-2"></i>Prévisions pour les 6 prochains mois
+                        </div>
+                        <div class="card-body">
+                            <canvas id="predictionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-exclamation-circle me-2"></i>Facteurs de risque
+                        </div>
+                        <div class="card-body">
+                            <canvas id="riskFactorsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-table me-2"></i>Données détaillées par région
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Région</th>
+                                            <th>Niveau actuel</th>
+                                            <th>Variation</th>
+                                            <th>Prévision 30j</th>
+                                            <th>Risque</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Western Cape - Cape Town</td>
+                                            <td>62.1%</td>
+                                            <td class="text-success">+1.5%</td>
+                                            <td>63.5%</td>
+                                            <td><span class="badge bg-success">Faible</span></td>
+                                            <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-info-circle"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Eastern Cape - Port Elizabeth</td>
+                                            <td>48.7%</td>
+                                            <td class="text-danger">-2.3%</td>
+                                            <td>46.2%</td>
+                                            <td><span class="badge bg-warning">Moyen</span></td>
+                                            <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-info-circle"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Northern Cape - Kimberley</td>
+                                            <td>75.3%</td>
+                                            <td class="text-success">+0.9%</td>
+                                            <td>76.1%</td>
+                                            <td><span class="badge bg-success">Faible</span></td>
+                                            <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-info-circle"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Free State - Bloemfontein</td>
+                                            <td>55.9%</td>
+                                            <td class="text-danger">-1.1%</td>
+                                            <td>54.8%</td>
+                                            <td><span class="badge bg-warning">Moyen</span></td>
+                                            <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-info-circle"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gauteng - Johannesburg</td>
+                                            <td>71.2%</td>
+                                            <td class="text-success">+0.5%</td>
+                                            <td>71.7%</td>
+                                            <td><span class="badge bg-success">Faible</span></td>
+                                            <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-info-circle"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>KwaZulu-Natal - Durban</td>
+                                            <td>60.5%</td>
+                                            <td class="text-success">+1.2%</td>
+                                            <td>61.8%</td>
+                                            <td><span class="badge bg-success">Faible</span></td>
+                                            <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-info-circle"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Limpopo - Polokwane</td>
+                                            <td>52.8%</td>
+                                            <td class="text-danger">-0.8%</td>
+                                            <td>52.0%</td>
+                                            <td><span class="badge bg-warning">Moyen</span></td>
+                                            <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-info-circle"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mpumalanga - Mbombela</td>
+                                            <td>65.1%</td>
+                                            <td class="text-success">+0.3%</td>
+                                            <td>65.4%</td>
+                                            <td><span class="badge bg-success">Faible</span></td>
+                                            <td><button class="btn btn-sm btn-outline-primary">
+
+
+                                                <i class="fas fa-info-circle"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>North West - Mahikeng</td>
+                                            <td>45.6%</td>
+                                            <td class="text-danger">-1.5%</td>
+                                            <td>44.1%</td>
+                                            <td><span class="badge bg-danger">Élevé</span></td>
+                                            <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-info-circle"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal fade" id="addRegionModal" tabindex="-1" aria-labelledby="addRegionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRegionModalLabel">Ajouter une région</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-region-form">
+                        <div class="mb-3">
+                            <label for="region-name" class="form-label">Nom de la région</label>
+                            <input type="text" class="form-control" id="region-name" placeholder="Ex: Gauteng" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="region-code" class="form-label">Code de la région</label>
+                            <input type="text" class="form-control" id="region-code" placeholder="Ex: GP">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="save-region-btn">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">Dashboard Eau Souterraine - Afrique du Sud &copy; 2025</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/charts.js"></script>
+    <script src="chart.js"></script>
+    <script src="assets/js/map.js"></script>
+    <script src="assets/js/predictions.js"></script>
+
+    <script>
+        // Carte par défaut centrée sur l'Afrique du Sud
+        var map = L.map('mapContainer').setView([-30.5595, 22.9375], 6); // Coordonnées de l'Afrique du Sud
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Gestion des régions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bouton pour sauvegarder une nouvelle région
+            document.getElementById('save-region-btn').addEventListener('click', function() {
+                const regionName = document.getElementById('region-name').value;
+                if (regionName) {
+                    addRegion(regionName);
+                    // Fermer le modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addRegionModal'));
+                    modal.hide();
+                    // Réinitialiser le formulaire
+                    document.getElementById('add-region-form').reset();
+                }
+            });
+
+            // Ajouter les écouteurs d'événements pour supprimer les régions
+            setupDeleteButtons();
+        });
+
+        // Fonction pour ajouter une région
+        function addRegion(regionName) {
+            const regionsList = document.getElementById('regions-list');
+            const newRegionItem = document.createElement('li');
+            newRegionItem.className = 'nav-item d-flex align-items-center';
+            newRegionItem.innerHTML = `
+                <a class="nav-link flex-grow-1" href="#">
+                    ${regionName}
+                </a>
+                <button class="btn btn-sm text-danger delete-region-btn">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            `;
+            regionsList.appendChild(newRegionItem);
+
+            // Ajouter l'écouteur d'événement pour le nouveau bouton de suppression
+            setupDeleteButtons();
+        }
+
+        // Fonction pour configurer les boutons de suppression
+        function setupDeleteButtons() {
+            const deleteButtons = document.querySelectorAll('.delete-region-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Confirmer la suppression
+                    if (confirm('Êtes-vous sûr de vouloir supprimer cette région?')) {
+                        // Supprimer l'élément parent (li)
+                        this.closest('li').remove();
+                    }
+                });
+            });
+        }
+    </script>
+
+</body>
+</html>

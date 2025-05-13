@@ -1,0 +1,201 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    background: linear-gradient(to bottom, #e0f7fa, #e0f2f7); /* Dégradé de fond moderne */
+    margin: 0;
+    padding-bottom: 50px; /* Pour éviter que le footer ne recouvre le contenu */
+} 
+
+
+
+.navbar {
+    background-color: #f8f9fa !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border-bottom: 1px solid #dee2e6;
+    position: fixed; /* Barre de navigation fixe en haut */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    color: #007bff !important;
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    color: #495057 !important;
+    transition: color 0.15s ease-in-out;
+}
+
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:hover {
+    color: #007bff !important;
+}
+
+.btn-primary,
+.btn-outline-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.btn-primary:hover,
+.btn-outline-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    color: white;
+}
+
+.sidebar {
+    background-color: #fff;
+    border-right: 1px solid #dee2e6;
+    padding-top: 56px; /* Ajustement pour la barre de navigation fixe */
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px; /* Sidebar plus étroite */
+    overflow-y: auto;
+    z-index: 999;
+}
+
+.sidebar-heading {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #6c757d;
+    padding: 0.75rem 1rem;
+}
+
+.nav-item .nav-link {
+    color: #495057;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.15s ease-in-out;
+    font-size: 0.875rem;
+}
+
+.nav-item .nav-link.active,
+.nav-item .nav-link:hover {
+    background-color: #e9ecef;
+    color: #007bff;
+}
+
+.container-fluid {
+    padding-top: 40px; /* Ajustement pour la barre de navigation fixe */
+    padding-left: 240px; /* Ajustement pour la sidebar fixe */
+    padding-right: 20px;
+}
+
+main {
+    padding: 3.5rem;
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    margin-bottom: 1.5rem;
+    background-color: #fff;
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem 1.5rem;
+    font-weight: bold;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.display-6 {
+    font-size: 2.5rem; /* Réduire légèrement la taille */
+    font-weight: bold;
+    color: inherit;
+}
+
+.badge {
+    font-weight: normal;
+    border-radius: 0.25rem;
+}
+
+.table {
+    background-color: #fff;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #e9ecef;
+    border-bottom: 2px solid #dee2e6;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.table tbody td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    padding: 1rem 0;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.875rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+#mapContainer {
+    height: 350px; /* Réduire la hauteur de la carte par défaut */
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.modal-content {
+    border-radius: 0.5rem;
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+    padding: 1rem;
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+/* Styles spécifiques pour la sidebar */
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.sidebar .delete-region-btn {
+    margin-left: auto;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}

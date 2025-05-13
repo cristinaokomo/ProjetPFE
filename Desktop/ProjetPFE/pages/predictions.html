@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédictions - Dashboard Eau Souterraine</title>
+    <link href="../style.css"  rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+</head>
+<body>
+    <!-- Navbar and Sidebar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="fas fa-water me-2"></i>Dashboard Eau Souterraine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="../test.html"><i class="fas fa-home me-2"></i>Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="analytics.html"><i class="fas fa-chart-bar me-2"></i>Analyses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="predictions.html"><i class="fas fa-chart-line me-2"></i>Prédictions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="historical.html"><i class="fas fa-history me-2"></i>Données historiques</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-outline-primary"><i class="fas fa-cog me-2"></i>Paramètres</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+     <!-- Barre de navigation -->
+ 
+    <!-- Same as before -->
+
+    <!-- Main content -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Prédictions pour les 6 prochains mois
+                    </div>
+                    <div class="card-body">
+                        <canvas id="predictionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Facteurs de risque
+                    </div>
+                    <div class="card-body">
+                        <canvas id="riskFactorsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">Dashboard Eau Souterraine &copy; 2025</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/charts.js"></script>
+
+    <script>
+        var ctxPrediction = document.getElementById('predictionChart').getContext('2d');
+        var predictionChart = new Chart(ctxPrediction, {
+            type: 'line',
+            data: {
+                labels: ['Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre'],
+                datasets: [{
+                    label: 'Prédiction des niveaux d\'eau',
+                    data: [62, 64, 60, 63, 65, 67],
+                    borderColor: 'rgb(153, 102, 255)',
+                    fill: false
+                }]
+            }
+        });
+
+        var ctxRisk = document.getElementById('riskFactorsChart').getContext('2d');
+        var riskFactorsChart = new Chart(ctxRisk, {
+            type: 'bar',
+            data: {
+                labels: ['Agriculture', 'Urbanisation', 'Changement climatique'],
+                datasets: [{
+                    label: 'Impact des facteurs',
+                    data: [40, 30, 50],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(75, 192, 192, 0.2)']
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
