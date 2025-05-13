@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from app.models.region import Region
 from app.models.groundwater_data import GroundwaterData
 from app.models.prediction import Prediction
-from app.services.prediction_model import generate_prediction
+# from app.services.prediction_model import generate_prediction
 from app import db
 from datetime import datetime
 
@@ -38,10 +38,11 @@ def prediction():
             'period': period
         }
         
-        prediction_result = generate_prediction(region_id, params)
+        # prediction_result = generate_prediction(region_id, params)
+        
         
         # Sauvegarder la prédiction
-        new_prediction = Prediction(
+        """ new_prediction = Prediction(
             region_id=region_id,
             user_id=current_user.id,
             prediction_date=datetime.now(),
@@ -50,12 +51,12 @@ def prediction():
             confidence_interval_high=prediction_result['confidence_high'],
             prediction_period=period,
             parameters=params
-        )
+        ) 
         db.session.add(new_prediction)
-        db.session.commit()
+        db.session.commit()"""
         
         return render_template('dashboard/prediction_result.html', 
-                               prediction=new_prediction, 
+                                #prediction=new_prediction, 
                                region=Region.query.get(region_id))
         
     return render_template('dashboard/prediction_form.html', regions=regions)

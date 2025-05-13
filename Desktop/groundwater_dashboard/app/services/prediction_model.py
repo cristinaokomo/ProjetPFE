@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor
+
 from datetime import datetime, timedelta
 from app.services.data_processor import get_historical_data, preprocess_data
 
@@ -27,10 +27,10 @@ def train_model(region_id):
     y = processed_data['water_level']
     
     # Entraînement du modèle
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
-    model.fit(X, y)
-    
-    return model, features
+    # model = RandomForestRegressor(n_estimators=100, random_state=42)
+    # .fit(X, y)
+    return 
+    # return model, features
 
 def generate_prediction(region_id, params):
     """Génère une prédiction pour une région donnée avec des paramètres spécifiques"""
