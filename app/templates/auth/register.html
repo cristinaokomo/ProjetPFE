@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}Inscription - Prédiction des Eaux Souterraines{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Créer un compte</h4>
+            </div>
+            <div class="card-body">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <form method="POST" action="{{ url_for('auth.register') }}" id="registerForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nom d'utilisateur <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                                </svg>
+                            </span>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Choisissez un nom d'utilisateur" required autofocus>
+                        </div>
+                        <div class="form-text">Le nom d'utilisateur doit contenir entre 3 et 20 caractères.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Adresse email <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.758 2.855L15 11.114v-5.73zm-.034 6.878L9.271 8.82 8 9.583 6.728 8.82l-5.694 3.44A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.739zM1 11.114l4.758-2.876L1 5.383v5.73z"/>
+                                </svg>
+                            </span>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Entrez votre adresse email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Mot de passe <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+                                    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+                                </svg>
+                            </span>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Créez un mot de passe fort" required>
+                        </div>
+                        <div class="form-text">Le mot de passe doit contenir au moins 8 caractères, incluant des lettres et des chiffres.</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label">Confirmer le mot de passe <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                                    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                                </svg>
+                            </span>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirmez votre mot de passe" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Votre rôle</label>
+                        <select class="form-select" id="role" name="role">
+                            <option value="researcher">Chercheur</option>
+                            <option value="water_manager">Gestionnaire de ressources en eau</option>
+                            <option value="environmentalist">Environnementaliste</option>
+                            <option value="other">Autre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4 form-check">
+                        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                        <label class="form-check-label" for="terms">
+                            J'accepte les <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">conditions d'utilisation</a> et la <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">politique de confidentialité</a>
+                        </label>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">S'inscrire</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer bg-light text-center">
+                <p class="mb-0">Vous avez déjà un compte? <a href="{{ url_for('auth.login') }}">Connectez-vous</a></p>
+            </div>
+        </div>
+        
+        <!-- Information sur le système -->
+        <div class="mt-4 text-center text-muted small">
+            <p>Système de prédiction des eaux souterraines en période de sécheresse</p>
+            <p>Afrique du Sud | Version 1.0</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour les conditions d'utilisation -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Conditions d'utilisation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Acceptation des conditions</h6>
+                <p>En accédant et en utilisant le système de prédiction des eaux souterraines, vous acceptez d'être lié par ces conditions. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser ce service.</p>
+                
+                <h6>2. Description du service</h6>
+                <p>Ce service vise à fournir des prédictions sur les niveaux d'eau souterraine en Afrique du Sud pendant les périodes de sécheresse. Les prédictions sont basées sur des modèles statistiques et ne garantissent pas une précision à 100%.</p>
+                
+                <h6>3. Utilisation des données</h6>
+                <p>Les données fournies par ce service sont destinées à des fins informatives uniquement. Elles ne doivent pas être considérées comme la seule base pour des décisions critiques concernant la gestion des ressources en eau.</p>
+                
+                <h6>4. Responsabilité</h6>
+                <p>Nous ne sommes pas responsables des décisions prises sur la base des prédictions fournies par ce service.</p>
+                
+                <h6>5. Modification des conditions</h6>
+                <p>Nous nous réservons le droit de modifier ces conditions à tout moment. Les modifications seront publiées sur cette page.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour la politique de confidentialité -->
+<div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="privacyModalLabel">Politique de confidentialité</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Collecte des données</h6>
+                <p>Nous collectons les informations que vous fournissez lors de l'inscription, y compris votre nom d'utilisateur, votre adresse e-mail et votre rôle professionnel.</p>
+                
+                <h6>2. Utilisation des données</h6>
+                <p>Les données collectées sont utilisées pour fournir et améliorer notre service, communiquer avec vous et à des fins de recherche sur les ressources en eau.</p>
+                
+                <h6>3. Partage des données</h6>
+                <p>Nous ne partageons pas vos informations personnelles avec des tiers sans votre consentement explicite, sauf si cela est requis par la loi.</p>
+                
+                <h6>4. Sécurité des données</h6>
+                <p>Nous mettons en œuvre des mesures de sécurité pour protéger vos informations personnelles contre tout accès ou divulgation non autorisés.</p>
+                
+                <h6>5. Droits des utilisateurs</h6>
+                <p>Vous avez le droit d'accéder à vos données personnelles, de les modifier ou de les supprimer. Pour exercer ces droits, veuillez nous contacter.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Validation du formulaire
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("registerForm");
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirm_password");
+        const username = document.getElementById("username");
+        
+        form.addEventListener("submit", function(e) {
+            let isValid = true;
+            
+            // Validation du nom d'utilisateur
+            if (username.value.length < 3 || username.value.length > 20) {
+                alert("Le nom d'utilisateur doit contenir entre 3 et 20 caractères.");
+                isValid = false;
+            }
+            
+            // Validation du mot de passe
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
+            if (!passwordRegex.test(password.value)) {
+                alert("Le mot de passe doit contenir au moins 8 caractères, incluant des lettres et des chiffres.");
+                isValid = false;
+            }
+            
+            // Vérification de la correspondance des mots de passe
+            if (password.value !== confirmPassword.value) {
+                alert("Les mots de passe ne correspondent pas.");
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
+        
+        // Focus sur le premier champ au chargement
+        username.focus();
+    });
+</script>
+{% endblock %}
